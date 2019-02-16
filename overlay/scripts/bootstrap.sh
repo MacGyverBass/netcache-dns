@@ -73,7 +73,7 @@ EOL
  echo >> "${CACHE_CONF}"
 
  # SOA RName (Email address encoded as a name)
- SOA_RName="22240712+StevesShop.users.noreply.github.com."
+ SOA_RName="noreply.example.com."
  # Zone Information
  let TTL=60*10
  # Start of Authority Resource Record (SOA RR)
