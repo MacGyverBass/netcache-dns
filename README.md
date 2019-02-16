@@ -42,7 +42,7 @@ In this case it is highly recommended that you use some form of load balancer or
 Run the netcache-dns container using the following to allow UDP port 53 (DNS) through the host machine:
 
 ```sh
-docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e USE_GENERIC_CACHE=true -e LANCACHE_IP=10.0.0.3 bassware/netcache-dns:latest
+docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e USE_GENERIC_CACHE=true -e LANCACHE_IP=10.0.0.3 macgyverbass/netcache-dns:latest
 ```
 
 The example above is binds to UDP port 53 on IP 10.0.0.2 on the host machine and specifies the single caching server is hosted on 10.0.0.3 on the host machine.
@@ -73,7 +73,7 @@ DISABLE_UPLAY=true
 Custom services may be added using the variable CUSTOMCACHE and hosts may be specified using just the service name as a variable.
 
 ```sh
-docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e USE_GENERIC_CACHE=true -e LANCACHE_IP=10.0.0.3 -e CUSTOMCACHE=MyCDN -e MYCDNCACHE=cdn.example.com bassware/netcache-dns:latest
+docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e USE_GENERIC_CACHE=true -e LANCACHE_IP=10.0.0.3 -e CUSTOMCACHE=MyCDN -e MYCDNCACHE=cdn.example.com macgyverbass/netcache-dns:latest
 ```
 
 This may also be used for ${SERVICE}CACHE_IP (mentioned previously) to specify different IP addresses for each service hosted.
@@ -99,7 +99,7 @@ MYBACKUPCDNCACHE_IP=10.0.0.23
 Custom service lists may also be specified using a local file.
 
 ```sh
-docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e USE_GENERIC_CACHE=true -e LANCACHE_IP=10.0.0.3 -e CUSTOMCACHE=MyCDN -e MYCDNCACHE=`cat MyCDN.txt` bassware/netcache-dns:latest
+docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e USE_GENERIC_CACHE=true -e LANCACHE_IP=10.0.0.3 -e CUSTOMCACHE=MyCDN -e MYCDNCACHE=`cat MyCDN.txt` macgyverbass/netcache-dns:latest
 ```
 
 Example MyCDN.txt file:
@@ -137,7 +137,7 @@ ONLYCACHE=origin
 To use a custom upstream DNS server (or servers), use the `UPSTREAM_DNS` variable:
 
 ```sh
-docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e STEAMCACHE_IP=10.0.0.3 -e UPSTREAM_DNS=8.8.8.8 bassware/netcache-dns:latest
+docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e STEAMCACHE_IP=10.0.0.3 -e UPSTREAM_DNS=8.8.8.8 macgyverbass/netcache-dns:latest
 ```
 
 This will add a forwarder for all queries not served by netcache-dns to be sent to the upstream DNS server, in this case Google's DNS.  If
@@ -148,7 +148,7 @@ you have a DNS server on 1.2.3.4, the command argument would be `-e UPSTREAM_DNS
 Additional upstream DNS servers can now be added using the `UPSTREAM_DNS` variable:
 
 ```sh
-docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e STEAMCACHE_IP=10.0.0.3 -e UPSTREAM_DNS=8.8.8.8,8.8.4.4 bassware/netcache-dns:latest
+docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e STEAMCACHE_IP=10.0.0.3 -e UPSTREAM_DNS=8.8.8.8,8.8.4.4 macgyverbass/netcache-dns:latest
 ```
 
 In this example, it will add two available forwarders to the Upstream DNS, if the query is not matched by the netcache-dns.
@@ -156,7 +156,7 @@ In this example, it will add two available forwarders to the Upstream DNS, if th
 Upstream DNS lists may also be specified using a local file.
 
 ```sh
-docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e STEAMCACHE_IP=10.0.0.3 -e UPSTREAM_DNS=`cat MyPreferredDNS.txt` bassware/netcache-dns:latest
+docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e STEAMCACHE_IP=10.0.0.3 -e UPSTREAM_DNS=`cat MyPreferredDNS.txt` macgyverbass/netcache-dns:latest
 ```
 
 Example MyPreferredDNS.txt file:
