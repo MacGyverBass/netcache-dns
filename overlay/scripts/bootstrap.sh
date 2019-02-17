@@ -27,6 +27,9 @@ BindUsername="named" # "named" or "bind" depending on bind install.
 fnSplitStrings () { # Removes comments, splits into lines from comma/space delimited strings, removes duplicates, and removes any blank lines.
  echo "$1" |sed "s/[, ]*#.*$//;s/[, ]/\n/g" |sed "/^$/d" |sort -u
 }
+fnReadEnvironmentVariable () { # Given a string, finds a matching environment variable value using a case-insensitive search.
+ printenv "$(env |sed -n "s/^\($1\)=.*$/\1/Ip"|head -n1)"
+}
 
 # DNS Upstream Setup
 DNS_FORWARDERS="" # Used for named.conf.options
@@ -44,8 +47,8 @@ setupDNS () { # setupDNS "Comma-Separated-IPs"
 
 # DNS Server Setup
 addServiceComment () { # addServiceComment "Comment String" "TRUE if # requested"
- Comment=$1 # String
- UseHash=$2 # Use "#" for comment prefix, otherwise "//" is used.  (True/False, default is false)  NOTE: Multi-line comments will still use /* ... */ format.
+ Comment="$1" # String
+ UseHash="$2" # Use "#" for comment prefix, otherwise "//" is used.  (True/False, default is false)  NOTE: Multi-line comments will still use /* ... */ format.
  if [[ "${Comment}" == *"\n"* ]];then
   echo "/*\n${Comment}\n*/" >> "${CACHE_CONF}"
  elif [ "${UseHash^^}" == "TRUE" ];then
@@ -55,9 +58,9 @@ addServiceComment () { # addServiceComment "Comment String" "TRUE if # requested
  fi
 }
 addService () { # addService "Service Name" "Service-IP" "Comma-Separated-URLs"
- ServiceName=$1 # Name of the given service.
- ServiceIP=$2 # String containing the destination IP to be given back to the client PC.
- URLs=$3 # String containing URL entries, comma/space delimited.
+ ServiceName="$1" # Name of the given service.
+ ServiceIP="$2" # String containing the destination IP to be given back to the client PC.
+ URLs="$3" # String containing URL entries, comma/space delimited.
  
  if [ -z "${ServiceName}" ]||[ -z "${ServiceIP}" ]||[ -z "${URLs}" ];then # All fields are required.
   echo "# Error adding service \"${ServiceName}\".  All arguments are required." >&2
@@ -185,7 +188,7 @@ curl -s "${CACHE_DOMAINS_REPO%/}/cache_domains.json" |jq -c '.cache_domains[]' |
  Service_Desc=`echo "${obj}"|jq -r '.description'`
  if (! (env |grep -iq "^DISABLE_${Service_Name^^}=true") && [ -z "${ONLYCACHE}" ])||[[ " ${ONLYCACHE^^} " == *" ${Service_Name^^} "* ]];then # Continue only if DISABLE_${Service} is not true and ONLYCACHE is empty.  Or continue if service is provided in the ONLYCACHE variable.  (Note that a service in ONLYCACHE will ignore the DISABLE_${Service} variable.)
   if [ -z "${LANCACHE_IP}" ]; then
-   Service_IP=`env |sed -n "s/^${Service_Name^^}CACHE_IP=//Ip"`
+   Service_IP="$(fnReadEnvironmentVariable "${Service_Name^^}CACHE_IP")"
   else
    Service_IP="${LANCACHE_IP}"
   fi
@@ -208,13 +211,14 @@ done
 
 ## Custom Domain Lists
 if (env |grep -iq "^CUSTOMCACHE=") && ! [ -z "${CUSTOMCACHE}" ];then
+ echo "* Adding custom services..."
  for Service_Name in ${CUSTOMCACHE};do
   if [ -z "${LANCACHE_IP}" ]; then
-   Service_IP=`env |sed -n "s/^${Service_Name^^}CACHE_IP=//Ip"`
+   Service_IP="$(fnReadEnvironmentVariable "${Service_Name^^}CACHE_IP")"
   else
    Service_IP="${LANCACHE_IP}"
   fi
-  Service_Source=`env |sed -n "s/^${Service_Name^^}CACHE=//Ip"`
+  Service_Source="$(fnReadEnvironmentVariable "${Service_Name^^}CACHE")"
   if [ -z "${Service_IP}" ];then
    echo "# ${Service_Name^^}CACHE_IP not provided." >&2
   elif [ -z "${Service_Source}" ];then

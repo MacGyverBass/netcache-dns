@@ -99,7 +99,7 @@ MYBACKUPCDNCACHE_IP=10.0.0.23
 Custom service lists may also be specified using a local file.
 
 ```sh
-docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e USE_GENERIC_CACHE=true -e LANCACHE_IP=10.0.0.3 -e CUSTOMCACHE=MyCDN -e MYCDNCACHE=`cat MyCDN.txt` macgyverbass/netcache-dns:latest
+docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e USE_GENERIC_CACHE=true -e LANCACHE_IP=10.0.0.3 -e CUSTOMCACHE=MyCDN -e MYCDNCACHE="$(cat MyCDN.txt)" macgyverbass/netcache-dns:latest
 ```
 
 Example MyCDN.txt file:
@@ -156,7 +156,7 @@ In this example, it will add two available forwarders to the Upstream DNS, if th
 Upstream DNS lists may also be specified using a local file.
 
 ```sh
-docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e STEAMCACHE_IP=10.0.0.3 -e UPSTREAM_DNS=`cat MyPreferredDNS.txt` macgyverbass/netcache-dns:latest
+docker run --name netcache-dns -p 10.0.0.2:53:53/udp -e STEAMCACHE_IP=10.0.0.3 -e UPSTREAM_DNS="$(cat MyPreferredDNS.txt)" macgyverbass/netcache-dns:latest
 ```
 
 Example MyPreferredDNS.txt file:
