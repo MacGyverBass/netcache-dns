@@ -57,20 +57,20 @@ addServiceComment () { # addServiceComment "Comment String" "TRUE if # requested
   echo "//${Comment}" >> "${CACHE_CONF}"
  fi
 }
-addService () { # addService "Service Name" "Service-IP" "Comma-Separated-URLs"
+addService () { # addService "Service Name" "Service-IP" "Comma-Separated-Domains"
  ServiceName="$1" # Name of the given service.
  ServiceIP="$2" # String containing the destination IP to be given back to the client PC.
- URLs="$3" # String containing URL entries, comma/space delimited.
+ Domains="$3" # String containing domain name entries, comma/space delimited.
  
- if [ -z "${ServiceName}" ]||[ -z "${ServiceIP}" ]||[ -z "${URLs}" ];then # All fields are required.
+ if [ -z "${ServiceName}" ]||[ -z "${ServiceIP}" ]||[ -z "${Domains}" ];then # All fields are required.
   echo "# Error adding service \"${ServiceName}\".  All arguments are required." >&2
   return
  fi
  echo "+ Adding service \"${ServiceName}\".  Will resolve to: ${ServiceIP}"
 
- fnSplitStrings "${URLs}" |sed "s/^\*\.//" |sort -u |while read URL;do
+ fnSplitStrings "${Domains}" |sed "s/^\*\.//" |sort -u |while read Domain;do
   cat << EOL >> "${CACHE_CONF}"
-zone "${URL}" in { type master; file "${ZONEPATH%/}/${ServiceName}.db";};
+zone "${Domain}" in { type master; file "${ZONEPATH%/}/${ServiceName}.db";};
 EOL
  done
  echo >> "${CACHE_CONF}"
@@ -201,8 +201,8 @@ curl -s "${CACHE_DOMAINS_REPO%/}/cache_domains.json" |jq -c '.cache_domains[]' |
    fi
    echo "${obj}" |jq -r '.domain_files[]' |while read domain_file;do
     addServiceComment " (${domain_file})" "true"
-    Service_URLs="$(curl -s "${CACHE_DOMAINS_REPO%/}/${domain_file}")"
-    addService "${Service_Name}" "${Service_IP}" "${Service_URLs}"
+    Service_Domains="$(curl -s "${CACHE_DOMAINS_REPO%/}/${domain_file}")"
+    addService "${Service_Name}" "${Service_IP}" "${Service_Domains}"
    done
   fi
  fi
