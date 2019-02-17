@@ -1,8 +1,7 @@
 FROM	alpine:latest
 LABEL	maintainer="Steven Bass"
 
-RUN	apk update	\
-	&& apk add	\
+RUN	apk --no-cache add	\
 		bind	\
 		bash	\
 		curl	\
