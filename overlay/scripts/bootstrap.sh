@@ -24,8 +24,8 @@ DNSRESOLV="/etc/resolv.conf"
 BindUsername="named" # "named" or "bind" depending on bind install.
 
 # Helpful function(s)
-fnSplitStrings () { # Removes comments, splits into lines from comma/space delimited strings, removes duplicates, and removes any blank lines.
- echo "$1" |sed "s/[, ]*#.*$//;s/[, ]/\n/g" |sed "/^$/d" |sort -u
+fnSplitStrings () { # Removes comments, splits into lines from comma/space delimited strings, and removes any blank lines.
+ echo "$1" |sed "s/[, ]*#.*$//;s/[, ]/\n/g" |sed "/^$/d"
 }
 fnReadEnvironmentVariable () { # Given a string, finds a matching environment variable value using a case-insensitive search.
  printenv "$(env |sed -n "s/^\($1\)=.*$/\1/Ip"|head -n1)"
