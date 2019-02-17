@@ -24,8 +24,8 @@ DNSRESOLV="/etc/resolv.conf"
 BindUsername="named" # "named" or "bind" depending on bind install.
 
 # Helpful function(s)
-fnSplitStrings () { # Removes comments, splits into lines from comma/space delimited strings, removes duplicates.
- echo "$1" |sed "s/[, ]*#.*$//;s/[, ]/\n/g" |sort -u
+fnSplitStrings () { # Removes comments, splits into lines from comma/space delimited strings, removes duplicates, and removes any blank lines.
+ echo "$1" |sed "s/[, ]*#.*$//;s/[, ]/\n/g" |sed "/^$/d" |sort -u
 }
 
 # DNS Upstream Setup
