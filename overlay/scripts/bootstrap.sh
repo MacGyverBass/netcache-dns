@@ -28,7 +28,7 @@ fnSplitStrings () { # Removes comments, splits into lines from comma/space delim
  echo "$1" |sed "s/[, ]*#.*$//;s/[, ]/\n/g" |sed "/^$/d"
 }
 fnReadEnvironmentVariable () { # Given a string, finds a matching environment variable value using a case-insensitive search.
- printenv "$(env |sed -n "s/^\($1\)=.*$/\1/Ip"|head -n1)"
+ printenv "$(env |sed -n "s/^\($1\)=.*$/\1/Ip"|head -n1)" || true
 }
 
 # DNS Upstream Setup
