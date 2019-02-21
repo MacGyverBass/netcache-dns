@@ -240,6 +240,7 @@ fi
 
 # Execute and display logs
 echo "* Running Bind9 w/logging"
+touch /var/log/named/general.log /var/log/named/default.log /var/log/named/queries.log
 tail -F /var/log/named/general.log /var/log/named/default.log /var/log/named/queries.log &
 /usr/sbin/named ${BindUsername:+-u ${BindUsername}} -c /etc/bind/named.conf -f
 BEC=$?
