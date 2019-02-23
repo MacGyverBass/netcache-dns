@@ -14,9 +14,9 @@ BANNER
 # Provide Defaults
 USE_GENERIC_CACHE="${USE_GENERIC_CACHE:-"false"}" #Using single IP for caching, which must be specified using LANCACHE.
 ENABLE_DNSSEC_VALIDATION="${ENABLE_DNSSEC_VALIDATION:-"false"}" #Enable DNS Security Validation
+CACHE_DOMAINS_REPO="${CACHE_DOMAINS_REPO:-"https://raw.githubusercontent.com/uklans/cache-domains/master/"}"
 
 # Static Entries
-CACHE_DOMAINS_REPO="https://raw.githubusercontent.com/uklans/cache-domains/master/"
 NAMED_OPTIONS="/etc/bind/named.conf.options"
 CACHE_CONF="/etc/bind/cache.conf"
 ZONEPATH="/etc/bind/cache/" #Location where the ${ServiceName}.db files will be kept.
